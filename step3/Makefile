@@ -6,15 +6,14 @@ all: python3.5/venv python3.5/sum.so
 
 %/venv:
 	set -ex; \
+	mkdir -p $(dir $@); \
 	PYTHON=$$(grep -Eo '^[^/]+' <<< $@); \
-	mkdir -p $$PYTHON; \
 	virtualenv $@ -p $$PYTHON
 
 %/sum.so: sum.c
 	set -ex; \
-	PYTHON=$$(grep -Eo '^[^/]+' <<< $@); \
-	mkdir -p $PYTHON; \
-	PYTHON=$$(sed s/python/python-/ <<< $$PYTHON); \
+	mkdir -p $(dir $@); \
+	PYTHON=$$(grep -Eo '^[^/]+' <<< $@ | sed s/python/python-/); \
 	gcc -Wall -fPIC -shared $$(pkg-config --cflags --libs $$PYTHON) -o $@ $<
 
 .PHONY: clean
