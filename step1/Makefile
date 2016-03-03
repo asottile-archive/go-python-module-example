@@ -1,11 +1,11 @@
 .PHONY: all
-all: main
+all: sum
 
 sum.h sum.so: sum.go
 	go build -buildmode=c-shared -o sum.so sum.go
 
-main: sum.so sum.h main.c
-	gcc -Wall -o main main.c ./sum.so
+sum: sum.so sum.h sum.c
+	gcc -Wall -o sum sum.c ./sum.so
 
 .PHONY: clean
 clean:
