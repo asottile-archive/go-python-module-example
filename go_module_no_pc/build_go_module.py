@@ -33,12 +33,15 @@ def main():
     ldflags = get_ldflags()
     cmd = ('go', 'build', '-buildmode=c-shared', '-o', so_file_name('sum'))
     env = {'CGO_CFLAGS': cflags, 'CGO_LDFLAGS': ldflags}
-    print('$ {} {}'.format(
-        ' '.join(
-            '{}={}'.format(k, pipes.quote(v))
-            for k, v in sorted(tuple(env.items()))
+    print(
+        '$ {} {}'.format(
+            ' '.join(
+                '{}={}'.format(k, pipes.quote(v))
+                for k, v in sorted(tuple(env.items()))
+            ),
+            ' '.join(pipes.quote(p) for p in cmd),
         ),
-        ' '.join(pipes.quote(p) for p in cmd), file=sys.stderr),
+        file=sys.stderr,
     )
     subprocess.check_call(cmd, env=dict(os.environ, **env))
 
